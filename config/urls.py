@@ -14,8 +14,8 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("users/", include("bakr_bot.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
+    # path("users/", include("bakr_bot.users.urls", namespace="users")),
+    # path("accounts/", include("allauth.urls")),
     # Messenger Bot
     path("messenger-bot/", include("bakr_bot.messenger_bot.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
