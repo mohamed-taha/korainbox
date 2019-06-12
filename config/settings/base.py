@@ -71,6 +71,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "bakr_bot.users.apps.UsersAppConfig",
     "bakr_bot.messenger_bot.apps.MessengerBotConfig",
+    "bakr_bot.football.apps.FootballConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -254,3 +255,8 @@ SOCIALACCOUNT_ADAPTER = "bakr_bot.users.adapters.SocialAccountAdapter"
 # Facebook
 FB_PAGE_ACCESS_TOKEN = env('FB_PAGE_ACCESS_TOKEN')
 FB_GRAPH_API_URL = env('FB_GRAPH_API_URL', default='https://graph.facebook.com/v3.3/')
+
+
+# Livescore API (https://livescore-api.com)
+LIVESCORE_API_KEY = env('LIVESCORE_API_KEY')
+LIVESCORE_API_SECRET = env('LIVESCORE_API_SECRET')
