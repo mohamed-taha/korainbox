@@ -1,6 +1,8 @@
 import requests
 from django.conf import settings
 
+from bakr_bot.users.tasks import create_user
+
 
 def get_user_info(user_psid):
     """Return user basic info through FB Graph API.
@@ -14,7 +16,12 @@ def get_user_info(user_psid):
 
     resp = requests.get(url)
 
-    return resp.json() if resp.status_code == 200 else None
+    if resp.status_code == 200:
+        info = resp.json()
+        create_user.delay(info)
+        return info
+    else:
+        return None
 
 #
 #  url = 'http://livescore-api.com/api-client/leagues/table.json?key=v4dX5KXYsyjpifce&secret=kpDPNBRC3oNuYXJu2Wr8Hp69YpyhELvZ&league={league_id}&season=

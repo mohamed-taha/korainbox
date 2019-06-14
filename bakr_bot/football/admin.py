@@ -1,5 +1,5 @@
 from django.contrib import admin
-from football.models import Country, League, Team
+from bakr_bot.football.models import Country, League, Team
 
 class CountryAdmin(admin.ModelAdmin):
     list_display = ['id', 'livescore_id', 'name', 'is_real']
