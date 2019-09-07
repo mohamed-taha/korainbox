@@ -2,13 +2,10 @@ import json
 import logging
 from pprint import pprint
 
-import requests
 from django.conf import settings
 from django.http.response import HttpResponse
-from django.utils.translation import ugettext_lazy as _
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
-from more_itertools.more import consecutive_groups
 from pymessenger.bot import Bot
 
 from bakr_bot.messenger_bot import constants
@@ -48,7 +45,10 @@ class MessengerBotView(generic.View):
                     print(user_info)
 
                     if user_info is not None:
-                        bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE.format(first_name=user_info.get('first_name')))
+                        bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE_0.format(first_name=user_info.get('first_name')))
                     else:
-                        bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE.format(first_name=''))
+                        bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE_0.format(first_name=''))
+                    bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE_1)
+                    bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE_2)
+                    bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE_3)
         return HttpResponse()

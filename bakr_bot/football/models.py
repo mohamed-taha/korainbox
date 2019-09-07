@@ -8,6 +8,7 @@ from model_utils.models import TimeStampedModel
 class Country(TimeStampedModel):
     # api_id = models.CharField(max_length=250, unique=True, null=True)  # ID on the API provider
     name = models.CharField(max_length=150)
+    name_ar = models.CharField(max_length=150, blank=True, null=True)
     code = models.CharField(max_length=10, unique=True, null=True, blank=True)
     is_real = models.CharField(max_length=1, default='1')  # TODO: remove this or change to Boolean
 
@@ -21,6 +22,7 @@ class League(TimeStampedModel):
     country = models.ForeignKey(Country, related_name='leagues', on_delete=models.CASCADE)
     api_id = models.CharField(max_length=250, unique=True)  # ID on the API provider
     name = models.CharField(max_length=250)
+    name_ar = models.CharField(max_length=250, blank=True, null=True)
     is_supported = models.BooleanField(_('Is league supported by KoraInbox?'), default=False)
 
     data = JSONField(null=True, blank=True)
@@ -33,6 +35,7 @@ class Team(TimeStampedModel):
     league = models.ForeignKey(League, related_name='teams', on_delete=models.CASCADE)
     api_id = models.CharField(max_length=250, unique=True)
     name = models.CharField(max_length=250)
+    name_ar = models.CharField(max_length=250, blank=True, null=True)
 
     data = JSONField(null=True, blank=True)
 

@@ -21,3 +21,6 @@ coreapi==2.3.3  # https://github.com/core-api/python-client
 
 # PyMessenger
 pymessenger==0.0.7.0
+
+# Django Model Translation
+# django-modeltranslation==0.13.1
