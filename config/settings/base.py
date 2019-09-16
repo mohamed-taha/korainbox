@@ -263,10 +263,10 @@ ACCOUNT_ADAPTER = "bakr_bot.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "bakr_bot.users.adapters.SocialAccountAdapter"
 
 # Facebook
-FB_PAGE_ACCESS_TOKEN = env('FB_PAGE_ACCESS_TOKEN')
-FB_GRAPH_API_URL = env('FB_GRAPH_API_URL', default='https://graph.facebook.com/v3.3/')
+# FB_PAGE_ACCESS_TOKEN = env('FB_PAGE_ACCESS_TOKEN')
+# FB_GRAPH_API_URL = env('FB_GRAPH_API_URL', default='https://graph.facebook.com/v3.3/')
 
 
-# Livescore API (https://livescore-api.com)
-LIVESCORE_API_KEY = env('LIVESCORE_API_KEY')
-LIVESCORE_API_SECRET = env('LIVESCORE_API_SECRET')
+# # Livescore API (https://livescore-api.com)
+# LIVESCORE_API_KEY = env('LIVESCORE_API_KEY')
+# LIVESCORE_API_SECRET = env('LIVESCORE_API_SECRET')
