@@ -1,6 +1,6 @@
 # git Settings
 setup_git_repo: true
-git_branch: develop
+git_branch: master
 
 # Database Settings
 db_user: "{{ application_name }}"
