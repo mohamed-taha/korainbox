@@ -1,3 +1,5 @@
+---
+
 # Make sure the sudoers file preserves the ability to use ssh forwarding.
 # That way we don't need to store a private key on the server to get
 # access to the git repository. Don't forget to add the key used by the

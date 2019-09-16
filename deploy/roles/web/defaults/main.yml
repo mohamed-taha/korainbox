@@ -1,3 +1,5 @@
+---
+
 # Virtualenv settings.
 recreate_virtualenv: false
 virtualenv_python_version: "{{ base_python_package }}"
@@ -7,7 +9,7 @@ virtualenv_path: "/webapps/{{ application_name }}"
 project_path: "{{ virtualenv_path }}/{{ project_name }}"
 application_log_dir: "{{ virtualenv_path }}/logs"
 application_log_file: "{{ application_log_dir }}/gunicorn_supervisor.log"
-requirements_file: "{{ project_path }}/requirements.txt"
+requirements_file: "{{ project_path }}/requirements/production.txt"
 
 
 # Gunicorn settings.
@@ -28,6 +30,7 @@ django_environment:
   DJANGO_SECRET_KEY: "{{ django_secret_key }}"
   MEDIA_ROOT: "{{ nginx_media_dir }}"
   STATIC_ROOT: "{{ nginx_static_dir }}"
+  DATABASE_URL: '127.0.0.1'
   DATABASE_NAME: "{{ db_name }}"
   DATABASE_USER: "{{ db_user }}"
   DATABASE_PASSWORD: "{{ db_password }}"

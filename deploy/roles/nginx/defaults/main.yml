@@ -1,1 +1,1 @@
-nginx_server_name: {{ inventory_hostname }}
+nginx_server_name: "{{ inventory_hostname }}"

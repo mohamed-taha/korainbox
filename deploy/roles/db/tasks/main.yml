@@ -35,7 +35,7 @@
 
 - name: Ensure user has acces to the database
   become: true
-  becomse_user: postgres               
+  become_user: postgres               
   postgresql_user: db={{ db_name }}
                    name={{ db_user }}
                    password={{ db_password }}
