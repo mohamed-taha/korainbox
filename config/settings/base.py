@@ -80,8 +80,8 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "bakr_bot.users.apps.UsersAppConfig",
-    "bakr_bot.messenger_bot.apps.MessengerBotConfig",
-    "bakr_bot.football.apps.FootballConfig",
+    # "bakr_bot.messenger_bot.apps.MessengerBotConfig",
+    # "bakr_bot.football.apps.FootballConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
