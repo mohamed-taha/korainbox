@@ -4,4 +4,4 @@
         owner={{ gunicorn_user }}
         group={{ gunicorn_group }}
         state=directory
-  changed_when: falses
+  changed_when: false

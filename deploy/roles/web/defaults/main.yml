@@ -30,7 +30,8 @@ django_environment:
   DJANGO_SECRET_KEY: "{{ django_secret_key }}"
   MEDIA_ROOT: "{{ nginx_media_dir }}"
   STATIC_ROOT: "{{ nginx_static_dir }}"
-  DATABASE_URL: '127.0.0.1'
+  DATABASE_URL: 'psql://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}'
   DATABASE_NAME: "{{ db_name }}"
   DATABASE_USER: "{{ db_user }}"
   DATABASE_PASSWORD: "{{ db_password }}"
+  DJANGO_ALLOWED_HOSTS: 'ec2-54-165-98-48.compute-1.amazonaws.com'
