@@ -1,0 +1,9 @@
+[all:vars]
+env=development
+ansible_ssh_private_key_file=~/Downloads/devops-test-app-1.pem
+
+[webservers]
+ec2-54-165-237-154.compute-1.amazonaws.com
+
+[dbservers]
+ec2-54-165-237-154.compute-1.amazonaws.com
