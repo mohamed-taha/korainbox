@@ -1,12 +1,13 @@
-upstream {{ application_name }}_wsgi_server {
-  # fail_timeout=0 means we always retry an upstream even if it failed
-  # to return a good HTTP response (in case the Unicorn master nukes a
-  # single worker for timing out).
-
-  server unix:{{ virtualenv_path }}/run/gunicorn.sock fail_timeout=0;
-}
-
 server {
-    listen      80;
-    server_name {{ nginx_server_name }};
+    listen 80;
+    server_name ec2-54-165-237-154.compute-1.amazonaws.com;
+
+    location /static/ {
+        alias   /webapps/bakr_bot/static/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/webapps/bakr_bot/run/gunicorn.sock;
+    }
 }
