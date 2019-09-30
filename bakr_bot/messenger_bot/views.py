@@ -27,22 +27,20 @@ class MessengerBotView(generic.View):
         return generic.View.dispatch(self, request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        # Converts the text payload into a python dictionary
         incoming_message = json.loads(self.request.body.decode('utf-8'))
-        # Facebook recommends going through every entry since they might send
-        # multiple messages in a single call during high load
+
         for entry in incoming_message['entry']:
             for message in entry['messaging']:
-                # Check to make sure the received call is a message call
-                # This might be delivery, optin, postback for other events 
+                pprint(message)
+
+                # Hanlde text messages
                 if 'message' in message:
-                    # Print the message to the terminal
-                    pprint(message)
+                    
                     bot.send_text_message(message['sender']['id'], 'Hey :D')
+
+                # Hanle PostBack messages
                 if 'postback' in message:
-                    print('post back')
                     user_info = get_user_info(message['sender']['id'])
-                    print(user_info)
 
                     if user_info is not None:
                         bot.send_text_message(message['sender']['id'], constants.WELCOME_MESSAGE_0.format(first_name=user_info.get('first_name')))
