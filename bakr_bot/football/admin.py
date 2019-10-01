@@ -9,8 +9,9 @@ admin.site.register(Country, CountryAdmin)
 
 
 class LeagueAdmin(admin.ModelAdmin):
-    list_display = ['id', 'api_id', 'name', 'name_ar', 'country']
-
+    list_display = ['id', 'api_id', 'name', 'name_ar', 'country', 'is_supported']
+    list_filter = ['is_supported']
+    search_fields = ['name', 'name_ar']
 
 admin.site.register(League, LeagueAdmin)
 

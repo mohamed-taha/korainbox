@@ -80,8 +80,8 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "bakr_bot.users.apps.UsersAppConfig",
-    # "bakr_bot.messenger_bot.apps.MessengerBotConfig",
-    # "bakr_bot.football.apps.FootballConfig",
+    "bakr_bot.messenger_bot.apps.MessengerBotConfig",
+    "bakr_bot.football.apps.FootballConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -261,6 +261,8 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ADAPTER = "bakr_bot.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "bakr_bot.users.adapters.SocialAccountAdapter"
+
+AUTH_USER_MODEL = 'users.User'
 
 # Facebook
 FB_PAGE_ACCESS_TOKEN = env('FB_PAGE_ACCESS_TOKEN')

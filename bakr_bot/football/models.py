@@ -1,8 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.db.models.fields import BooleanField, SmallIntegerField
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
+
+from bakr_bot.football.utils import league_directory_path
+
+User = get_user_model()
 
 
 class Country(TimeStampedModel):
@@ -24,6 +28,9 @@ class League(TimeStampedModel):
     name = models.CharField(max_length=250)
     name_ar = models.CharField(max_length=250, blank=True, null=True)
     is_supported = models.BooleanField(_('Is league supported by KoraInbox?'), default=False)
+
+    logo = models.FileField(upload_to=league_directory_path)
+    followers = models.ManyToManyField(User, through='LeagueUserMembership')
 
     data = JSONField(null=True, blank=True)
 
@@ -59,3 +66,15 @@ class Fixture(TimeStampedModel):
 
     def __str__(self):
         return "%s %s Vs. %s" %(str(self.event_date), self.home_team.name, self.away_team.name)
+
+
+class LeagueUserMembership(TimeStampedModel):
+    """
+    A `through` class for many-to-many relationship between users and leagues.
+    User can follow multiple leagues and League can be followed by multiple users.
+    """
+    user = models.ForeignKey(User, related_name="leagues", on_delete=models.CASCADE)
+    league = models.ForeignKey(League, related_name="users", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'league')
