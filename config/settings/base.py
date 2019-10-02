@@ -26,7 +26,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = "Africa/Cairo"
+TIME_ZONE = 'UTC' # Egypt: UTC+2 & England: UTC+1
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "ar"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -228,20 +228,20 @@ MANAGERS = ADMINS
 
 # Celery
 # ------------------------------------------------------------------------------
-# INSTALLED_APPS += ["bakr_bot.taskapp.celery.CeleryAppConfig"]
-# if USE_TZ:
+INSTALLED_APPS += ["bakr_bot.taskapp.celery.CeleryAppConfig"]
+if USE_TZ:
 #     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
-#     CELERY_TIMEZONE = TIME_ZONE
+    CELERY_TIMEZONE = TIME_ZONE
 # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-broker_url
-# CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_backend
-# CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-accept_content
-# CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_ACCEPT_CONTENT = ["json"]
 # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-task_serializer
-# CELERY_TASK_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"
 # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-result_serializer
-# CELERY_RESULT_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 # # http://docs.celeryproject.org/en/latest/userguide/configuration.html#task-time-limit
 # # TODO: set to whatever value is adequate in your circumstances
 # CELERYD_TASK_TIME_LIMIT = 5 * 60
@@ -272,3 +272,7 @@ FB_GRAPH_API_URL = env('FB_GRAPH_API_URL', default='https://graph.facebook.com/v
 # # Livescore API (https://livescore-api.com)
 LIVESCORE_API_KEY = env('LIVESCORE_API_KEY')
 LIVESCORE_API_SECRET = env('LIVESCORE_API_SECRET')
+
+# CELERY TASKS
+TASK_GET_LEAGUES_MATCHES_RUNTIME_HOUR = env.int('TASK_GET_LEAGUES_MATCHES_RUNTIME_HOUR', default=12)
+TASK_GET_LEAGUES_MATCHES_RUNTIME_MINUTE = env.int('TASK_GET_LEAGUES_MATCHES_RUNTIME_MINUTE', default=0)
