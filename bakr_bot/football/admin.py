@@ -1,8 +1,11 @@
 from django.contrib import admin
+
 from bakr_bot.football.models import (
-    Country, Fixture, 
-    League, Team,
-    LeagueUserMembership,
+    Competition,
+    CompetitionUserMembership,
+    Country,
+    Fixture,
+    Team,
 )
 
 class CountryAdmin(admin.ModelAdmin):
@@ -12,32 +15,32 @@ class CountryAdmin(admin.ModelAdmin):
 admin.site.register(Country, CountryAdmin)
 
 
-class LeagueAdmin(admin.ModelAdmin):
+class CompetitionAdmin(admin.ModelAdmin):
     list_display = ['id', 'api_id', 'name', 'name_ar', 'country', 'is_supported']
     list_filter = ['is_supported']
     search_fields = ['name', 'name_ar']
 
-admin.site.register(League, LeagueAdmin)
+admin.site.register(Competition, CompetitionAdmin)
 
 
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ['id', 'api_id', 'name', 'name_ar', 'league']
+    list_display = ['id', 'api_id', 'name', 'name_ar', 'country']
 
 
 admin.site.register(Team, TeamAdmin)
 
 
 class FixtureAdmin(admin.ModelAdmin):
-    list_display = ['id', 'event_date', 'name', 'status', 'api_id', 'league']
+    list_display = ['id', 'event_date', 'name', 'status', 'api_id', 'competition']
 
 
 admin.site.register(Fixture, FixtureAdmin)
 
 
-class LeagueUserMembershipAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'league', 'created']
-    list_filter = ['league', 'user']
-    search_fields = ['league', 'user']
+class CompetitionMembershipAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'competition', 'created']
+    list_filter = ['competition', 'user']
+    search_fields = ['competition', 'user']
 
 
-admin.site.register(LeagueUserMembership, LeagueUserMembershipAdmin)
+admin.site.register(CompetitionUserMembership, CompetitionMembershipAdmin)

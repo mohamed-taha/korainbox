@@ -4,7 +4,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
-from bakr_bot.football.utils import league_directory_path
+from bakr_bot.football.utils import competition_directory_path
 
 User = get_user_model()
 
@@ -22,15 +22,15 @@ class Country(TimeStampedModel):
         return self.name
 
 
-class League(TimeStampedModel):
-    country = models.ForeignKey(Country, related_name='leagues', on_delete=models.CASCADE)
+class Competition(TimeStampedModel):
+    country = models.ForeignKey(Country, related_name='competitions', on_delete=models.CASCADE)
     api_id = models.CharField(max_length=250, unique=True)  # ID on the API provider
     name = models.CharField(max_length=250)
     name_ar = models.CharField(max_length=250, blank=True, null=True)
-    is_supported = models.BooleanField(_('Is league supported by KoraInbox?'), default=False)
+    is_supported = models.BooleanField(_('Is competition supported by KoraInbox?'), default=False)
 
-    logo = models.FileField(upload_to=league_directory_path)
-    followers = models.ManyToManyField(User, through='LeagueUserMembership')
+    logo = models.FileField(upload_to=competition_directory_path)
+    followers = models.ManyToManyField(User, through='CompetitionUserMembership')
 
     data = JSONField(null=True, blank=True)
 
@@ -39,7 +39,7 @@ class League(TimeStampedModel):
 
 
 class Team(TimeStampedModel):
-    league = models.ForeignKey(League, related_name='teams', on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, related_name='teams', on_delete=models.CASCADE)
     api_id = models.CharField(max_length=250, unique=True)
     name = models.CharField(max_length=250)
     name_ar = models.CharField(max_length=250, blank=True, null=True)
@@ -51,7 +51,8 @@ class Team(TimeStampedModel):
 
 
 class Fixture(TimeStampedModel):
-    league = models.ForeignKey(League, related_name='fixtures', on_delete=models.CASCADE)
+    """Fixtures = Matches"""
+    competition = models.ForeignKey(Competition, related_name='fixtures', on_delete=models.CASCADE)
     api_id = models.CharField(max_length=250, unique=True)
     name = models.CharField(max_length=250, null=True, blank=True)
     event_date = models.DateTimeField()
@@ -68,13 +69,13 @@ class Fixture(TimeStampedModel):
         return "%s %s Vs. %s" %(str(self.event_date), self.home_team.name, self.away_team.name)
 
 
-class LeagueUserMembership(TimeStampedModel):
+class CompetitionUserMembership(TimeStampedModel):
     """
-    A `through` class for many-to-many relationship between users and leagues.
-    User can follow multiple leagues and League can be followed by multiple users.
+    A `through` class for many-to-many relationship between users and competitions.
+    User can follow multiple competitions and competitions can be followed by multiple users.
     """
     user = models.ForeignKey(User, related_name="leagues", on_delete=models.CASCADE)
-    league = models.ForeignKey(League, related_name="users", on_delete=models.CASCADE)
+    competition = models.ForeignKey(Competition, related_name="users", on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('user', 'league')
+        unique_together = ('user', 'competition')

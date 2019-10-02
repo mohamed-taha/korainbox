@@ -9,9 +9,9 @@ from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
 from pymessenger.bot import Bot
 
-from bakr_bot.football.models import League, LeagueUserMembership
+from bakr_bot.football.models import Competition, CompetitionUserMembership
 from bakr_bot.messenger_bot import constants
-from bakr_bot.messenger_bot.utils import get_supported_leagues_message, get_user_info
+from bakr_bot.messenger_bot.utils import get_supported_competitions_message, get_user_info
 from bakr_bot.users.models import User
 
 logger = logging.getLogger(__name__)
@@ -64,50 +64,50 @@ class MessengerBotView(generic.View):
 
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_4)
                             site_domain = current_site.domain
-                            supported_leagues_message = get_supported_leagues_message(sender_id, site_domain)
+                            supported_competitions_message = get_supported_competitions_message(sender_id, site_domain)
 
-                            bot.send_message(sender_id, supported_leagues_message)
+                            bot.send_message(sender_id, supported_competitions_message)
 
-                    # Hanlde User clicked `Follow` League button
+                    # Hanlde User clicked `Follow` Competition button
                     if(postback_payload['action'] == 'follow'
-                        and postback_payload['item']['type'] == 'league'):
+                        and postback_payload['item']['type'] == 'competition'):
                         user, _ = User.objects.get_or_create(facebook_psid=sender_id)
                         try:
-                            league = League.objects.get(pk=postback_payload['item']['id'])
-                            _, created = LeagueUserMembership.objects.get_or_create(
-                                user=user, league=league)
+                            competition = Competition.objects.get(pk=postback_payload['item']['id'])
+                            _, created = CompetitionUserMembership.objects.get_or_create(
+                                user=user, competition=competition)
 
                             if created:
                                 bot.send_text_message(
-                                    sender_id, constants.FOLLOW_LEAGUE_SUCCESS_MESSAGE.format(
-                                        league_name=league.name_ar + ' - ' + league.name))
+                                    sender_id, constants.FOLLOW_COMPETITION_SUCCESS_MESSAGE.format(
+                                        competition_name=competition.name_ar + ' - ' + competition.name))
                             else:
                                 bot.send_text_message(
-                                    sender_id, constants.FOLLOW_LEAGUE_ALREADY_FOLLOWING_MESSAGE.format(
-                                        league_name=league.name_ar + ' - ' + league.name))
-                        except League.DoesNotExist:
+                                    sender_id, constants.FOLLOW_COMPETITION_ALREADY_FOLLOWING_MESSAGE.format(
+                                        competition_name=competition.name_ar + ' - ' + competition.name))
+                        except Competition.DoesNotExist:
                             logger.warning(
-                                "[Follow League]: League {} not found!".format(postback_payload["item"]["id"]))
+                                "[Follow Competition]: Competition {} not found!".format(postback_payload["item"]["id"]))
                     
-                    # Hanlde User clicked `UnFollow` League button
+                    # Hanlde User clicked `UnFollow` Competition button
                     if(postback_payload['action'] == 'unfollow'
-                        and postback_payload['item']['type'] == 'league'):
+                        and postback_payload['item']['type'] == 'competition'):
                         user, _ = User.objects.get_or_create(facebook_psid=sender_id)
                         try:
-                            league = League.objects.get(pk=postback_payload['item']['id'])
-                            league_user_membership = LeagueUserMembership.objects.get(
-                                user=user, league=league)
+                            competition = Competition.objects.get(pk=postback_payload['item']['id'])
+                            competition_user_membership = CompetitionUserMembership.objects.get(
+                                user=user, competition=competition)
 
-                            league_user_membership.delete()
+                            competition_user_membership.delete()
                             bot.send_text_message(
-                                sender_id, constants.UNFOLLOW_LEAGUE_SUCCESS_MESSAGE.format(
-                                    league_name=league.name_ar + ' - ' + league.name))
-                        except League.DoesNotExist:
+                                sender_id, constants.UNFOLLOW_COMPETITION_SUCCESS_MESSAGE.format(
+                                    competition_name=competition.name_ar + ' - ' + competition.name))
+                        except Competition.DoesNotExist:
                             logger.warning(
-                                "[UnFollow League]: League {} not found!".format(postback_payload["item"]["id"]))
-                        except LeagueUserMembership.DoesNotExist:
+                                "[UnFollow Competition]: Competition {} not found!".format(postback_payload["item"]["id"]))
+                        except CompetitionUserMembership.DoesNotExist:
                             logger.warning(
-                                "[UnFollow League]: League-User-Membership for league {} and user {} not found!".format(
+                                "[UnFollow Competition]: Competition-User-Membership for competition {} and user {} not found!".format(
                                     postback_payload["item"]["id"], sender_id))
 
         return HttpResponse("success", status=200)

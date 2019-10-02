@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='league',
             name='logo',
-            field=models.FileField(default='default', upload_to=bakr_bot.football.utils.league_directory_path),
+            field=models.FileField(default='default', upload_to=bakr_bot.football.utils.competition_directory_path),
             preserve_default=False,
         ),
     ]
