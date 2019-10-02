@@ -1,5 +1,9 @@
 from django.contrib import admin
-from bakr_bot.football.models import Country, Fixture, League, Team
+from bakr_bot.football.models import (
+    Country, Fixture, 
+    League, Team,
+    LeagueUserMembership,
+)
 
 class CountryAdmin(admin.ModelAdmin):
     list_display = ['id', 'code', 'name', 'name_ar', 'is_real']
@@ -28,3 +32,12 @@ class FixtureAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Fixture, FixtureAdmin)
+
+
+class LeagueUserMembershipAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'league', 'created']
+    list_filter = ['league', 'user']
+    search_fields = ['league', 'user']
+
+
+admin.site.register(LeagueUserMembership, LeagueUserMembershipAdmin)
