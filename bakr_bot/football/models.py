@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 class Country(TimeStampedModel):
-    # api_id = models.CharField(max_length=250, unique=True, null=True)  # ID on the API provider
+    api_id = models.CharField(max_length=250, unique=True, null=True)  # ID on the API provider
     name = models.CharField(max_length=150)
     name_ar = models.CharField(max_length=150, blank=True, null=True)
     code = models.CharField(max_length=10, unique=True, null=True, blank=True)

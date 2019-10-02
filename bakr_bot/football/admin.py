@@ -9,7 +9,7 @@ from bakr_bot.football.models import (
 )
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'code', 'name', 'name_ar', 'is_real']
+    list_display = ['id', 'api_id', 'code', 'name', 'name_ar', 'is_real']
 
 
 admin.site.register(Country, CountryAdmin)
