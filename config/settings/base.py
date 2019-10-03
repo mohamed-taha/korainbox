@@ -274,6 +274,8 @@ LIVESCORE_API_KEY = env('LIVESCORE_API_KEY')
 LIVESCORE_API_SECRET = env('LIVESCORE_API_SECRET')
 
 LIVESCORE_COUNTRIES_LIST_API_URL = f'http://livescore-api.com/api-client/countries/list.json?key={LIVESCORE_API_KEY}&secret={LIVESCORE_API_SECRET}'
+LIVESCORE_TEAMS_LIST_API_URL = f'http://livescore-api.com/api-client/teams/list.json?key={LIVESCORE_API_KEY}&secret={LIVESCORE_API_SECRET}&language=ar'
+LIVESCORE_COMPETITIONS_LIST_API_URL = f'http://livescore-api.com/api-client/competitions/list.json?key={LIVESCORE_API_KEY}&secret={LIVESCORE_API_SECRET}'
 
 # CELERY TASKS
 TASK_GET_LEAGUES_MATCHES_RUNTIME_HOUR = env.int('TASK_GET_LEAGUES_MATCHES_RUNTIME_HOUR', default=12)

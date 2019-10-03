@@ -17,7 +17,7 @@ admin.site.register(Country, CountryAdmin)
 
 class CompetitionAdmin(admin.ModelAdmin):
     list_display = ['id', 'api_id', 'name', 'name_ar', 'country', 'is_supported']
-    list_filter = ['is_supported']
+    list_filter = ['is_supported', 'country']
     search_fields = ['name', 'name_ar']
 
 admin.site.register(Competition, CompetitionAdmin)
@@ -25,6 +25,8 @@ admin.site.register(Competition, CompetitionAdmin)
 
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['id', 'api_id', 'name', 'name_ar', 'country']
+    list_filter = ['country']
+    search_fields = ['name', 'name_ar']
 
 
 admin.site.register(Team, TeamAdmin)

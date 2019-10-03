@@ -16,4 +16,6 @@ def get_supported_competitions_matches():
 
     # TODO: save the matches to the database
 
+    # TODO: schedule a task for eahc user to notify him on his time
+
     logger.info("Get matches success")

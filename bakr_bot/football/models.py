@@ -23,7 +23,7 @@ class Country(TimeStampedModel):
 
 
 class Competition(TimeStampedModel):
-    country = models.ForeignKey(Country, related_name='competitions', on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, related_name='competitions', on_delete=models.CASCADE, blank=True, null=True)
     api_id = models.CharField(max_length=250, unique=True)  # ID on the API provider
     name = models.CharField(max_length=250)
     name_ar = models.CharField(max_length=250, blank=True, null=True)
@@ -35,11 +35,14 @@ class Competition(TimeStampedModel):
     data = JSONField(null=True, blank=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.country.name)
+        if getattr(self, 'country'):
+            return f"{self.name} - {self.country.name}"
+        else:
+            return self.name
 
 
 class Team(TimeStampedModel):
-    country = models.ForeignKey(Country, related_name='teams', on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, related_name='teams', on_delete=models.CASCADE, null=True, blank=True)
     api_id = models.CharField(max_length=250, unique=True)
     name = models.CharField(max_length=250)
     name_ar = models.CharField(max_length=250, blank=True, null=True)
@@ -47,7 +50,7 @@ class Team(TimeStampedModel):
     data = JSONField(null=True, blank=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.league.country.name)
+        return "%s - %s" % (self.name, self.country.name)
 
 
 class Fixture(TimeStampedModel):
