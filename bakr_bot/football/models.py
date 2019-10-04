@@ -1,3 +1,7 @@
+import logging
+
+import requests
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 from django.db import models
@@ -6,6 +10,7 @@ from model_utils.models import TimeStampedModel
 
 from bakr_bot.football.utils import competition_directory_path
 
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 
@@ -34,6 +39,47 @@ class Competition(TimeStampedModel):
 
     data = JSONField(null=True, blank=True)
 
+    def update_fixtures(self, date: str):
+        """Get competition fixtures (matches) on a date and save them to DB.
+        Args:
+            - data: :String date string of format `yyyy-mm-dd` ex: 2019-07-09
+        """
+        logger.info("Started updating compteition {} fitures for date: {}".format(self.name, date))
+
+        api_fixtures_url_extra_params = f"&date={date}&competition_id={self.api_id}"
+        api_fixtures_url = settings.LIVESCORE_FIXTURES_LIST_API_URL + api_fixtures_url_extra_params
+        session = requests.Session()
+
+        while api_fixtures_url:
+            resp = session.get(api_fixtures_url)
+            resp.raise_for_status()
+            data = resp.json()
+            fixtures = data['data']['fixtures']
+
+            for fixture in fixtures:
+                home_team = Team.objects.get(api_id=fixture['home_id'])
+                away_team = Team.objects.get(api_id=fixture['away_id'])
+                db_fixture, created = Fixture.objects.update_or_create(api_id=fixture['id'], defaults={
+                    'name_ar': fixture['away_name'] + "  -  " + fixture['home_name'],
+                    'competition': self,
+                    'event_date': fixture['date'],
+                    'event_time': fixture['time'] if fixture['time'] != "00:00" else None,
+                    'round': fixture['round'] if str(fixture['round']) != "999" else None,
+                    'venue': fixture['location'],
+                    'home_team': home_team,
+                    'away_team': away_team,
+                    'name': home_team.name + " Vs. " + away_team.name,
+                    'data': fixture
+                })
+                if created:
+                    logger.info("Fixture {} inserted to DB".format(db_fixture.id))
+                else:
+                    logger.info("Fixture {} updated in DB".format(db_fixture.id))
+
+            api_fixtures_url = data['data']['next_page']
+
+        logger.info("Finished updating compteition {} fitures for date: {}".format(self.name, date))
+
     def __str__(self):
         if getattr(self, 'country'):
             return f"{self.name} - {self.country.name}"
@@ -50,7 +96,7 @@ class Team(TimeStampedModel):
     data = JSONField(null=True, blank=True)
 
     def __str__(self):
-        return "%s - %s" % (self.name, self.country.name)
+        return self.name
 
 
 class Fixture(TimeStampedModel):
@@ -58,7 +104,10 @@ class Fixture(TimeStampedModel):
     competition = models.ForeignKey(Competition, related_name='fixtures', on_delete=models.CASCADE)
     api_id = models.CharField(max_length=250, unique=True)
     name = models.CharField(max_length=250, null=True, blank=True)
-    event_date = models.DateTimeField()
+    name_ar = models.CharField(max_length=250, null=True, blank=True)
+    event_date = models.DateField()
+    event_time = models.TimeField(null=True, blank=True)
+    round = models.CharField(max_length=150, blank=True, null=True)
     status = models.CharField(max_length=150)
     elapsed = models.SmallIntegerField(default=0)
     venue = models.CharField(_('Venue / Stadium'), max_length=250, null=True, blank=True)

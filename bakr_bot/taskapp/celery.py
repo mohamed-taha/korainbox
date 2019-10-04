@@ -29,11 +29,11 @@ class CeleryAppConfig(AppConfig):
         app.autodiscover_tasks(lambda: installed_apps, force=True)
 
         app.conf.beat_schedule = {
-            'run-get-supported-leagues-matches-every-day-at-12-am': {
-                'task': 'bakr_bot.football.tasks.get_supported_leagues_matches',
+            'run-get-supported-competitions-matches-every-day-at-12-am': {
+                'task': 'bakr_bot.football.tasks.get_supported_competitions_today_matches',
                 'schedule': crontab(
-                    minute=settings.TASK_GET_LEAGUES_MATCHES_RUNTIME_MINUTE,
-                    hour=settings.TASK_GET_LEAGUES_MATCHES_RUNTIME_HOUR, day_of_week='*',
+                    minute=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_MINUTE,
+                    hour=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_HOUR, day_of_week='*',
                     day_of_month='*', month_of_year='*'
                 ),  # Run daily at 12 AM server time (UTC); 2 AM Cairo; 1 AM London;
             },
