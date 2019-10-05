@@ -10,6 +10,10 @@ body {
   color: #343e48;
 }
 
+.rtl{
+  direction: rtl;
+}
+
 p {
   margin-bottom: 1.3em;
   margin-top: 0px;
@@ -243,7 +247,7 @@ small, .font_small {
   border: 0px;
   margin-bottom: 0px !important;
   position: absolute;
-  top: 0;
+  top: 10;
   left: 0;
   right: 0;
   z-index: 999;
