@@ -39,12 +39,13 @@ class Competition(TimeStampedModel):
 
     data = JSONField(null=True, blank=True)
 
-    def update_fixtures(self, date: str):
+    def fetch_and_update_fixtures(self, date: str):
         """Get competition fixtures (matches) on a date and save them to DB.
         Args:
             - data: :String date string of format `yyyy-mm-dd` ex: 2019-07-09
         """
-        logger.info("Started updating compteition {} fitures for date: {}".format(self.name, date))
+        logger.info("Started fetching and updating compteition %s fixtures for date: %s",
+                    self.name, date)
 
         api_fixtures_url_extra_params = f"&date={date}&competition_id={self.api_id}"
         api_fixtures_url = settings.LIVESCORE_FIXTURES_LIST_API_URL + api_fixtures_url_extra_params
@@ -72,13 +73,13 @@ class Competition(TimeStampedModel):
                     'data': fixture
                 })
                 if created:
-                    logger.info("Fixture {} inserted to DB".format(db_fixture.id))
+                    logger.info("Fixture %d inserted to DB", db_fixture.id)
                 else:
-                    logger.info("Fixture {} updated in DB".format(db_fixture.id))
+                    logger.info("Fixture %d updated in DB", db_fixture.id)
 
             api_fixtures_url = data['data']['next_page']
 
-        logger.info("Finished updating compteition {} fitures for date: {}".format(self.name, date))
+        logger.info("Finished fetching and updating compteition %s fixtures for date: %s", self.name, date)
 
     def __str__(self):
         if getattr(self, 'country'):
@@ -108,7 +109,7 @@ class Fixture(TimeStampedModel):
     event_date = models.DateField()
     event_time = models.TimeField(null=True, blank=True)
     round = models.CharField(max_length=150, blank=True, null=True)
-    status = models.CharField(max_length=150)
+    status = models.CharField(max_length=150, null=True, blank=True)
     elapsed = models.SmallIntegerField(default=0)
     venue = models.CharField(_('Venue / Stadium'), max_length=250, null=True, blank=True)
 

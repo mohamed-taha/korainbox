@@ -30,7 +30,7 @@ class CeleryAppConfig(AppConfig):
 
         app.conf.beat_schedule = {
             'run-get-supported-competitions-matches-every-day-at-12-am': {
-                'task': 'bakr_bot.football.tasks.get_supported_competitions_today_matches',
+                'task': 'bakr_bot.football.tasks.fetch_and_save_supported_competitions_today_matches',
                 'schedule': crontab(
                     minute=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_MINUTE,
                     hour=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_HOUR, day_of_week='*',
