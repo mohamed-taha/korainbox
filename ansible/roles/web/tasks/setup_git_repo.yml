@@ -17,14 +17,21 @@
   when: ssh_forward_agent is defined and ssh_forward_agent
   tags: git
 
-# The git module calls python's tempfile.mkstemp() which uses the TMPDIR
-# environment variable. However this is set to /tmp which is mounted as
-# noexec. As a result the git command will fail. The solution is to set
-# TMPDIR to point to some other suitable location. Here we use /var/tmp
-# but any suitable location will do.
-#
-# https://github.com/ansible/ansible/issues/30064
-# https://docs.python.org/dev/library/tempfile.html?highlight=mkstemp#tempfile.tempdir
+# TODO: move src to env vars
+- name: Add github ssh key
+  copy: >
+    src=~/.ssh/id_rsa
+    dest=/home/{{ server_user }}/.ssh/id_rsa.github
+    mode=0600
+  tags: git
+
+- name: configure ssh to use ansible key for github.com
+  template: >
+    src=templates/ssh_config.j2
+    dest=/home/{{ server_user }}/.ssh/config
+    mode=0644
+
+  tags: git
 
 - name: Setup the Git repo
   environment:
@@ -34,6 +41,7 @@
        dest={{ project_path }}
        accept_hostkey=yes
        force=yes
+       key_file=/home/{{ server_user }}/.ssh/id_rsa.github
   when: setup_git_repo is defined and setup_git_repo
   notify: restart application
   tags: git
