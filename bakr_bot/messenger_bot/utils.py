@@ -27,7 +27,7 @@ def get_user_info(user_psid):
         return None
 
 
-def get_supported_competitions_message(user_psid, site_domain):
+def get_supported_competitions_message(user_psid):
     """Return a facebook messenger generic message of competitions supported by KoraInbox.
     Note: You can only list up to 10 elements in a generic message.
     """
@@ -37,7 +37,7 @@ def get_supported_competitions_message(user_psid, site_domain):
 
     for competition in supported_competitions:
         title = competition.name_ar + " - " + competition.name
-        logo_url = site_domain + competition.logo.url
+        logo_url = competition.logo.url
 
         if CompetitionUserMembership.objects.filter(user=user, competition=competition).exists():
             payload_action = "unfollow"

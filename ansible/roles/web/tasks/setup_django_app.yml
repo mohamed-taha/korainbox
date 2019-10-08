@@ -21,6 +21,16 @@
   when: run_django_db_migrations is defined and run_django_db_migrations
   tags: django.migrate
 
+# TODO: Automate superuser creation
+# - name: Create Admin Super User
+#   django_manage:
+#       command: "createsuperuser --noinput --username=<replace> --email=replace"
+#       app_path: "{{ project_path }}"
+#       virtualenv: "{{ virtualenv_path }}"
+#       settings: "{{ django_settings_file }}"
+#   environment: "{{ django_environment }}"
+#   tags: testing
+
 - name: Run Django collectstatic
   django_manage:
     command: collectstatic

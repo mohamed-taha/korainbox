@@ -3,7 +3,6 @@ import logging
 from pprint import pprint
 
 from django.conf import settings
-from django.contrib.sites.models import Site
 from django.http.response import HttpResponse
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
@@ -15,7 +14,6 @@ from bakr_bot.messenger_bot.utils import get_supported_competitions_message, get
 from bakr_bot.users.models import User
 
 logger = logging.getLogger(__name__)
-current_site = Site.objects.get_current()
 bot = Bot(settings.FB_PAGE_ACCESS_TOKEN)
 
 class MessengerBotView(generic.View):
@@ -63,9 +61,8 @@ class MessengerBotView(generic.View):
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_3)
 
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_4)
-                            site_domain = current_site.domain
-                            supported_competitions_message = get_supported_competitions_message(sender_id, site_domain)
 
+                            supported_competitions_message = get_supported_competitions_message(sender_id)
                             bot.send_message(sender_id, supported_competitions_message)
 
                     # Hanlde User clicked `Follow` Competition button
