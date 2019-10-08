@@ -34,7 +34,7 @@ django_environment:
   DATABASE_NAME: "{{ db_name }}"
   DATABASE_USER: "{{ db_user }}"
   DATABASE_PASSWORD: "{{ db_password }}"
-  DJANGO_ALLOWED_HOSTS: 'ec2-54-165-98-48.compute-1.amazonaws.com'
+  DJANGO_ALLOWED_HOSTS: 'korainbox.com'
   CELERY_BROKER_URL: "{{ broker_url }}"
   TASK_GET_COMPETITIONS_MATCHES_RUNTIME_HOUR: 12
   TASK_GET_COMPETITIONS_MATCHES_RUNTIME_MINUTE: 0
@@ -42,4 +42,3 @@ django_environment:
   FB_GRAPH_API_URL: https://graph.facebook.com/v3.3/
   LIVESCORE_API_KEY: esPMSjPv7NpyDIQJ
   LIVESCORE_API_SECRET: V9HBSqyVezxWZOtehj0aCPFKD5ihN80I
-  
