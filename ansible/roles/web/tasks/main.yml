@@ -10,7 +10,7 @@
   tags: deploy
 
 - include: setup_django_app.yml
-  tags: deployß
+  tags: deploy
 
 - include: setup_supervisor.yml
   tags: supervisor

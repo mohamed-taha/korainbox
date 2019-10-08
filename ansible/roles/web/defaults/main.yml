@@ -42,3 +42,4 @@ django_environment:
   FB_GRAPH_API_URL: https://graph.facebook.com/v3.3/
   LIVESCORE_API_KEY: esPMSjPv7NpyDIQJ
   LIVESCORE_API_SECRET: V9HBSqyVezxWZOtehj0aCPFKD5ihN80I
+  DJANGO_AWS_STORAGE_BUCKET_NAME: static-staging-korainbox
