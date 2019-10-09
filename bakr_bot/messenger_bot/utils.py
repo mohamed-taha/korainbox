@@ -18,6 +18,7 @@ def get_user_info(user_psid):
     url = settings.FB_GRAPH_API_URL + user_psid + '?access_token=' + settings.FB_PAGE_ACCESS_TOKEN
 
     resp = requests.get(url)
+    resp.raise_for_status()
 
     if resp.status_code == 200:
         info = resp.json()

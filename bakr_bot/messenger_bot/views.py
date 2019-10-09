@@ -50,7 +50,7 @@ class MessengerBotView(generic.View):
                             user = User.objects.get(facebook_psid=sender_id)
                             first_name = user.first_name
                         except User.DoesNotExist:
-                            logger.info("[Get Started button]: User {} not found".format(sender_id))
+                            logger.info("[Get Started button]: User %s not found", str(sender_id))
                             user_info = get_user_info(sender_id)
                             first_name = '' if user_info is None else user_info.get('first_name')
                         finally:

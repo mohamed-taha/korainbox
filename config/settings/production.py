@@ -1,10 +1,10 @@
 import logging
 
-# import sentry_sdk
+import sentry_sdk
 
-# from sentry_sdk.integrations.django import DjangoIntegration
-# from sentry_sdk.integrations.logging import LoggingIntegration
-# from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.celery import CeleryIntegration
 
 
 from .base import *  # noqa
@@ -206,17 +206,17 @@ LOGGING = {
 
 # Sentry
 # ------------------------------------------------------------------------------
-# SENTRY_DSN = env("SENTRY_DSN")
-# SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
 
-# sentry_logging = LoggingIntegration(
-#     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
-#     event_level=None,  # Send no events from log messages
-# )
-# sentry_sdk.init(
-#     dsn=SENTRY_DSN,
-#     integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
-# )
+sentry_logging = LoggingIntegration(
+    level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
+    event_level=None,  # Send no events from log messages
+)
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
+)
 
 # Your stuff...
 # ------------------------------------------------------------------------------
