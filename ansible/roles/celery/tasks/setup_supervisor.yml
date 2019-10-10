@@ -3,9 +3,13 @@
 - name: Ensure the Supervisor service is running
   service: name=supervisor state=started enabled=yes
 
-- name: Create the Supervisor config file for {{ celery_application_name }}
-  template: src=supervisor_{{ celery_application_name }}.conf.j2
-            dest=/etc/supervisor/conf.d/{{ celery_application_name }}.conf
+- name: Create the Supervisor config file for celery_worker
+  template: src=supervisor_celery_worker.conf.j2
+            dest=/etc/supervisor/conf.d/celery_worker.conf
+
+- name: Create the Supervisor config file for celery_beat
+  template: src=supervisor_celery_beat.conf.j2
+            dest=/etc/supervisor/conf.d/celery_beat.conf
 
 - name: Create the {{ celery_application_name }} log directory
   file: path={{ celery_log_dir }}
@@ -13,12 +17,12 @@
         group={{ celery_group }}
         state=directory
 
-- name: Check for an existing celery logfile
+- name: Check for an existing celery worker logfile
   stat:
-    path: "{{ celery_log_file }}"
-  register: p
+    path: "{{ celery_worker_log_file }}"
+  register: pw
 
-- name: Create (or retain) the {{ celery_application_name }} log file
+- name: Create (or retain) celery worker log file
   # Removing until https://github.com/ansible/ansible/issues/45530 gets resolved.
   # copy: content=""
   #       dest={{ celery_log_file }}
@@ -26,10 +30,31 @@
   #       group={{ celery_group }}
   #       force=no
   file:
-    path: "{{ celery_log_file }}"
+    path: "{{ celery_worker_log_file }}"
     owner: "{{ celery_user }}"
     group: "{{ celery_group }}"
-    state: '{{ "file" if  p.stat.exists else "touch" }}'
+    state: '{{ "file" if  pw.stat.exists else "touch" }}'
 
-- name: Re-read the Supervisor config files
-  supervisorctl: name={{ celery_application_name }} state=present
+- name: Check for an existing celery beat logfile
+  stat:
+    path: "{{ celery_beat_log_file }}"
+  register: pb
+
+- name: Create (or retain) celery beat log file
+  # Removing until https://github.com/ansible/ansible/issues/45530 gets resolved.
+  # copy: content=""
+  #       dest={{ celery_log_file }}
+  #       owner={{ celery_user }}
+  #       group={{ celery_group }}
+  #       force=no
+  file:
+    path: "{{ celery_beat_log_file }}"
+    owner: "{{ celery_user }}"
+    group: "{{ celery_group }}"
+    state: '{{ "file" if  pb.stat.exists else "touch" }}'
+
+- name: Re-read the Supervisor config files for celery worker
+  supervisorctl: name=celery_worker state=present
+
+- name: Re-read the Supervisor config files for celery beat
+  supervisorctl: name=celery_beat state=present

@@ -41,5 +41,6 @@
   when: run_django_collectstatic is defined and run_django_collectstatic
   notify: 
     - restart application
-    - restart celery
+    - restart celery worker
+    - restart celery beat
   tags: django.collectstatic
