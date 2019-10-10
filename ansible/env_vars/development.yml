@@ -3,9 +3,7 @@ setup_git_repo: true
 git_branch: develop
 
 # Database Settings
-db_user: "{{ application_name }}"
-db_name: "{{ application_name }}"
-db_password: password
+db_url: 'psql://postgres:HY4ehJCwKJUvKUS@staging-korainbox-db.cp3muwbptgkc.us-east-1.rds.amazonaws.com:5432/bakrbot_db_staging'
 
 # Gunicorn settings. For the number of workers, a good rule to follow is
 # 2 x number of CPUs + 1

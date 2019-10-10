@@ -4,6 +4,3 @@ ansible_ssh_private_key_file=~/Downloads/devops-test-app-1.pem
 
 [webservers]
 korainbox.com nginx_use_letsencrypt=true
-
-[dbservers]
-korainbox.com
