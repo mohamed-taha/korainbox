@@ -228,7 +228,7 @@ MANAGERS = ADMINS
 
 # Celery
 # ------------------------------------------------------------------------------
-# INSTALLED_APPS += ["bakr_bot.taskapp.celery.CeleryAppConfig"]
+INSTALLED_APPS += ["bakr_bot.taskapp.celery.CeleryAppConfig"]
 if USE_TZ:
 #     # http://docs.celeryproject.org/en/latest/userguide/configuration.html#std:setting-timezone
     CELERY_TIMEZONE = TIME_ZONE
