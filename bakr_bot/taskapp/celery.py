@@ -39,6 +39,8 @@ class CeleryAppConfig(AppConfig):
             },
         }
 
+        # Set Visibility timeout to 30 days
+        app.conf.broker_transport_options = {'visibility_timeout': 2592000}  # Seconds
 
 @app.task(bind=True)
 def debug_task(self):
