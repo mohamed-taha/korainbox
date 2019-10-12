@@ -4,3 +4,8 @@
         owner={{ gunicorn_user }}
         group={{ gunicorn_group }}
         state=directory
+  notify: 
+    - restart application
+    - restart celery worker
+    - restart celery beat
+  
