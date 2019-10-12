@@ -109,3 +109,9 @@ See detailed `cookiecutter-django Docker documentation`_.
 
 
 
+# Flower 
+on the server:
+- activate virtual env
+- run `celery flower`
+- on your local machine run `ssh -L 5555:localhost:5555 -i /path/to/you/pemfile ubuntu@korainbox.com`
+- on your local machine browser visit: `http://localhost:5555` 
