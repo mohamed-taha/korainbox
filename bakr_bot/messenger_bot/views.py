@@ -37,8 +37,13 @@ class MessengerBotView(generic.View):
 
                 # Hanlde text messages
                 if 'message' in message:
-
-                    bot.send_text_message(sender_id, 'Hey :D')
+                    if 'هاي' in message['message']['text']:
+                        bot.send_text_message(sender_id, 'هاي :D')
+                    else:  # Hanlde Unknown Messages
+                        # bot.send_action(sender_id, 'typing_on')
+                        bot.send_text_message(sender_id, constants.REPLY_TO_UNKNOWN_MESSAGE_0)
+                        # TODO: Replace with dynamic generated buuton list
+                        bot.send_text_message(sender_id, constants.REPLY_TO_UNKNOWN_MESSAGE_1)
 
                 # Hanle PostBack messages
                 if 'postback' in message:
