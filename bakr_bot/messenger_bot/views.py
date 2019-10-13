@@ -40,7 +40,6 @@ class MessengerBotView(generic.View):
                     if 'هاي' in message['message']['text']:
                         bot.send_text_message(sender_id, 'هاي :D')
                     else:  # Hanlde Unknown Messages
-                        # bot.send_action(sender_id, 'typing_on')
                         bot.send_text_message(sender_id, constants.REPLY_TO_UNKNOWN_MESSAGE_0)
                         # TODO: Replace with dynamic generated buuton list
                         bot.send_text_message(sender_id, constants.REPLY_TO_UNKNOWN_MESSAGE_1)
@@ -64,8 +63,8 @@ class MessengerBotView(generic.View):
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_1)
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_2)
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_3)
-
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_4)
+                            bot.send_action(sender_id, 'typing_on')
 
                             supported_competitions_message = get_supported_competitions_message(sender_id)
                             bot.send_message(sender_id, supported_competitions_message)

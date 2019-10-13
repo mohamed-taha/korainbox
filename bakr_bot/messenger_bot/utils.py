@@ -55,7 +55,6 @@ def get_supported_competitions_message(user_psid):
                 {
                     "type": "postback",
                     "title": button_title,
-                    # "payload": f"{payload_action}_LEAGUE_{competition.id}"
                     "payload": json.dumps({
                         "action": payload_action,
                         "item": {
