@@ -37,6 +37,7 @@ class MessengerBotView(generic.View):
 
                 # Hanlde text messages
                 if 'message' in message:
+                    # reply = get_reply_to_text_message(message)
                     if 'هاي' in message['message']['text']:
                         bot.send_text_message(sender_id, 'هاي :D')
                     else:  # Hanlde Unknown Messages
@@ -47,7 +48,7 @@ class MessengerBotView(generic.View):
                 # Hanle PostBack messages
                 if 'postback' in message:
                     postback_payload = json.loads(message['postback']['payload'])
-  
+
                     # Handle User clicked `Get Started` button
                     if postback_payload['action'] == 'get_started_button':
                         try:
@@ -68,6 +69,7 @@ class MessengerBotView(generic.View):
 
                             supported_competitions_message = get_supported_competitions_message(sender_id)
                             bot.send_message(sender_id, supported_competitions_message)
+                            bot.send_action(sender_id, 'typing_off')
 
                     # Hanlde User clicked `Follow` Competition button
                     if(postback_payload['action'] == 'follow'

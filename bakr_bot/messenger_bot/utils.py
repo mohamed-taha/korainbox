@@ -78,3 +78,26 @@ def get_supported_competitions_message(user_psid):
     }
 
     return message
+
+
+def get_reply_to_text_message(message: dict) -> dict:
+    """Handle a text message sent by user and return a reply.
+
+    Args:
+        - message: message body sent by FaceBook.
+
+    Returns:
+        - reply: the reply message object which might hold a text or generic msg.
+    """
+    # TODO: check if message has `nlp` key
+        # TODO: check if it has entity `ok` ->  return text reply
+
+        # TODO check if has entity `thanking` -> return text reply
+
+        # TODO: check entity `scheduleInquiry` and `competition` ->
+            # TODO: check entity `date/time` then filter the query based on it
+            # else: get soonest
+        # else: check `compeition` only -> ask user if he wants the schdule (default: or for now assume he wants so)
+        # else: check `schduleInquiry` only -> ask user which competition he wants (default: show schdule for all competitions)
+    # TODO: return constant reply for unknown messages ( TODO: should be informative like give examples of questions or list of buttons)
+    pass
