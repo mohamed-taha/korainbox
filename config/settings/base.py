@@ -28,7 +28,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = 'UTC' # Egypt: UTC+2 & England: UTC+1
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = "ar"
+# LANGUAGE_CODE = "ar"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
@@ -38,9 +38,9 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
-LANGUAGES = (
-    ('ar', 'Arabic')
-)
+# LANGUAGES = (
+#     ('ar', 'Arabic')
+# )
 
 LOCALE_PATH = (
     str(ROOT_DIR("locale")),

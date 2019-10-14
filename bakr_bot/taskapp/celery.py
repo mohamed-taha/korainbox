@@ -29,8 +29,8 @@ class CeleryAppConfig(AppConfig):
         app.autodiscover_tasks(lambda: installed_apps, force=True)
 
         app.conf.beat_schedule = {
-            'run-get-supported-competitions-matches-every-day-at-12-am': {
-                'task': 'bakr_bot.football.tasks.fetch_and_save_supported_competitions_today_matches',
+            'run-get-supported-competitions-fixtures-every-day-at-12-am': {
+                'task': 'bakr_bot.football.tasks.fetch_and_save_supported_competitions_fixtures',
                 'schedule': crontab(
                     minute=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_MINUTE,
                     hour=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_HOUR, day_of_week='*',
@@ -39,8 +39,8 @@ class CeleryAppConfig(AppConfig):
             },
         }
 
-        # Set Visibility timeout to 30 days
-        app.conf.broker_transport_options = {'visibility_timeout': 2592000}  # Seconds
+        # Set Visibility timeout to 30 days (in seconds)
+        app.conf.broker_transport_options = {'visibility_timeout': 2592000}
 
 @app.task(bind=True)
 def debug_task(self):

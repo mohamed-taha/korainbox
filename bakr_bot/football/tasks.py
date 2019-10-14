@@ -19,18 +19,18 @@ bot = Bot(settings.FB_PAGE_ACCESS_TOKEN)
 
 
 @shared_task(max_retries=5)
-def fetch_and_save_supported_competitions_today_matches():
+def fetch_and_save_supported_competitions_fixtures():
     """Get supported competitions' matches from extrernal API
     and save them in Database.
     """
-    logger.info("Started getting today matches for supported competitions")
+    logger.info("Started fetching supported competitions' fixtures")
 
-    # Get matches for each upooprted competition from the API
+    # Get matches for each supported competition from the API
     supported_competitions = Competition.objects.filter(is_supported=True)
     now = timezone.now()
 
     for competition in supported_competitions:
-        competition.fetch_and_update_fixtures(date=now.date().strftime('%Y-%m-%d'))
+        competition.fetch_and_update_fixtures()
 
         competition_today_fixtures = competition.fixtures.filter(event_date=now.date()).exists()
 
@@ -65,7 +65,7 @@ def send_user_competition_today_matches(user_id, competition_id):
                 logo_url = current_site.domain  + comp.logo.url  # TODO: Replace by img of the 2 teams and watermark
                 subtitle = "اليوم \t" + str(match.event_time) # FIXME: localize the date and time
 
-                # TODO: Add follow/umfollow buttons
+                # TODO: Add follow/unfollow buttons
                 element = {
                     "title": title,
                     "image_url": logo_url,

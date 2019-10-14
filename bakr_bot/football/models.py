@@ -39,15 +39,17 @@ class Competition(TimeStampedModel):
 
     data = JSONField(null=True, blank=True)
 
-    def fetch_and_update_fixtures(self, date: str):
+    def fetch_and_update_fixtures(self, date: str = None):
         """Get competition fixtures (matches) on a date and save them to DB.
         Args:
             - data: :String date string of format `yyyy-mm-dd` ex: 2019-07-09
+                    if not provided all the competition fixtures will be fetched
         """
         logger.info("Started fetching and updating compteition %s fixtures for date: %s",
                     self.name, date)
 
-        api_fixtures_url_extra_params = f"&date={date}&competition_id={self.api_id}"
+        api_fixtures_url_extra_params = f"&competition_id={self.api_id}"
+        api_fixtures_url_extra_params += f"&date={date}" if date is not None else ''
         api_fixtures_url = settings.LIVESCORE_FIXTURES_LIST_API_URL + api_fixtures_url_extra_params
         session = requests.Session()
 
@@ -79,7 +81,7 @@ class Competition(TimeStampedModel):
 
             api_fixtures_url = data['data']['next_page']
 
-        logger.info("Finished fetching and updating compteition %s fixtures for date: %s", self.name, date)
+        logger.info("Finished fetching and updating comptetition %s fixtures for date: %s", self.name, date)
 
     def __str__(self):
         if getattr(self, 'country'):
