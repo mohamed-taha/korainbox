@@ -1,0 +1,39 @@
+# git Settings
+setup_git_repo: true
+git_branch: develop
+
+# Database Settings
+db_url: 'psql://postgres:HY4ehJCwKJUvKUS@staging-korainbox-db.cp3muwbptgkc.us-east-1.rds.amazonaws.com:5432/bakrbot_db_staging'
+
+# Gunicorn settings. For the number of workers, a good rule to follow is
+# 2 x number of CPUs + 1
+gunicorn_num_workers: 3
+
+# Setting this to 1 will restart the Gunicorn process each time
+# you make a request, basically reloading the code. Very handy
+# when developing. Set to 0 for unlimited requests (default).
+gunicorn_max_requests: 0
+
+# RabbitMQ settings.
+rabbitmq_server_name: "{{ inventory_hostname }}"
+
+rabbitmq_admin_user: admin
+rabbitmq_admin_password: password
+
+rabbitmq_application_vhost: "{{ application_name }}"
+rabbitmq_application_user: "{{ application_name }}"
+rabbitmq_application_password: password
+
+
+# Celery settings.
+celery_num_workers: 2
+
+
+# Application settings.
+django_settings_file: "config.settings.production"
+django_secret_key: "akr2iclt1n8%z^3fe3c+)5d0(t^cy-2_25rrl89a7@!scna^1#"
+
+broker_url: "redis://redis-staging-korainbox.cv2ds0.0001.use1.cache.amazonaws.com:6379/0"
+
+run_django_db_migrations: true
+run_django_collectstatic: true

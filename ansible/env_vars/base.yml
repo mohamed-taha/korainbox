@@ -1,0 +1,8 @@
+git_repo: git@github.com:mohamed-taha/korainbox.git
+
+# Set this flag to true so you can checkout code from a private git repository
+# which is setup with an SSH key.
+ssh_forward_agent: true
+
+project_name: korainbox
+application_name: bakr_bot
