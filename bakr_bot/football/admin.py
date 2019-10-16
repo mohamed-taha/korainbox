@@ -33,7 +33,7 @@ admin.site.register(Team, TeamAdmin)
 
 
 class FixtureAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'event_date', 'event_time', 'status', 'api_id', 'competition']
+    list_display = ['id', 'name', 'name_ar', 'event_date', 'event_time', 'status', 'api_id', 'competition']
     search_fields = ['name', 'name_ar']
     list_filter = ['event_date', 'competition']
 

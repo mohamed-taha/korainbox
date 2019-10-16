@@ -12,6 +12,7 @@ from pymessenger.bot import Bot
 from bakr_bot.football.models import Competition
 from bakr_bot.users.models import User
 from bakr_bot.football import constants
+from bakr_bot.football.utils import build_fixtures_messneger_generic_message
 
 logger = logging.getLogger(__name__)
 current_site = Site.objects.get_current()
@@ -58,31 +59,8 @@ def send_user_competition_today_matches(user_id, competition_id):
         comp_today_matches = comp.fixtures.filter(event_date=now.date())
 
         if comp_today_matches.exists():
-            elements = []
 
-            for match in comp_today_matches:
-                title = match.name_ar
-                logo_url = current_site.domain  + comp.logo.url  # TODO: Replace by img of the 2 teams and watermark
-                subtitle = "اليوم \t" + str(match.event_time) # FIXME: localize the date and time
-
-                # TODO: Add follow/unfollow buttons
-                element = {
-                    "title": title,
-                    "image_url": logo_url,
-                    "subtitle": subtitle
-                }
-
-                elements.append(element)
-
-            matches_schedule_message = {
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": elements
-                    }
-                }
-            }
+            matches_schedule_message = build_fixtures_messneger_generic_message(comp_today_matches)
 
             bot.send_text_message(
                 user.facebook_psid,

@@ -10,7 +10,11 @@ from pymessenger.bot import Bot
 
 from bakr_bot.football.models import Competition, CompetitionUserMembership
 from bakr_bot.messenger_bot import constants
-from bakr_bot.messenger_bot.utils import get_supported_competitions_message, get_user_info
+from bakr_bot.messenger_bot.utils import (
+    get_supported_competitions_message,
+    get_user_info,
+    get_replies_to_text_message,
+)
 from bakr_bot.users.models import User
 
 logger = logging.getLogger(__name__)
@@ -37,13 +41,17 @@ class MessengerBotView(generic.View):
 
                 # Hanlde text messages
                 if 'message' in message:
-                    # reply = get_reply_to_text_message(message)
-                    if 'هاي' in message['message']['text']:
-                        bot.send_text_message(sender_id, 'هاي :D')
-                    else:  # Hanlde Unknown Messages
-                        bot.send_text_message(sender_id, constants.REPLY_TO_UNKNOWN_MESSAGE_0)
-                        # TODO: Replace with dynamic generated buuton list
-                        bot.send_text_message(sender_id, constants.REPLY_TO_UNKNOWN_MESSAGE_1)
+                    replies = get_replies_to_text_message(message['message'])
+
+                    bot.send_action(sender_id, 'typing_on')
+                    for reply in replies:
+                        if isinstance(reply, str):
+                            bot.send_text_message(sender_id, reply)
+                        elif isinstance(reply, dict):
+                            bot.send_message(sender_id, reply)
+                        else:
+                            logger.warning("Got invalid reply type from get replies to text message function: %s",
+                                           str(reply))
 
                 # Hanle PostBack messages
                 if 'postback' in message:

@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 import requests
 from django.conf import settings
@@ -6,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from model_utils.models import TimeStampedModel
 
 from bakr_bot.football.utils import competition_directory_path
@@ -82,6 +84,16 @@ class Competition(TimeStampedModel):
             api_fixtures_url = data['data']['next_page']
 
         logger.info("Finished fetching and updating comptetition %s fixtures for date: %s", self.name, date)
+
+    def next_30_days_fixtures(self):
+        """
+        Return nearst 10 fixtures in the coming 30 days including today.
+        """
+        # TODO: Enhance to return today's matches and then next days (annotation)
+        today = timezone.now().date()
+        fixtures = self.fixtures.filter(
+            event_date__gte=today, event_date__lte=today + timedelta(days=30)).order_by('event_date', 'event_time')[:10]
+        return fixtures if fixtures.exists() else None
 
     def __str__(self):
         if getattr(self, 'country'):

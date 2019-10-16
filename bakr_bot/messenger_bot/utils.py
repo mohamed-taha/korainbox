@@ -1,10 +1,17 @@
 import json
+import logging
+import random
 import requests
+from typing import List, Union
 from django.conf import settings
 
 from bakr_bot.football.models import Competition, CompetitionUserMembership
+from bakr_bot.football.utils import build_fixtures_messneger_generic_message
+from bakr_bot.messenger_bot import constants
 from bakr_bot.users.tasks import create_user
 from bakr_bot.users.models import User
+
+logger = logging.getLogger(__name__)
 
 
 def get_user_info(user_psid):
@@ -80,24 +87,57 @@ def get_supported_competitions_message(user_psid):
     return message
 
 
-def get_reply_to_text_message(message: dict) -> dict:
+def get_replies_to_text_message(message: dict) -> List[Union[dict, str]]:
     """Handle a text message sent by user and return a reply.
 
     Args:
         - message: message body sent by FaceBook.
 
     Returns:
-        - reply: the reply message object which might hold a text or generic msg.
+        - reply: a list of either string message, dicts(generic messages) or mix of them.
     """
-    # TODO: check if message has `nlp` key
-        # TODO: check if it has entity `ok` ->  return text reply
-
-        # TODO check if has entity `thanking` -> return text reply
-
+    if message.get('nlp') is not None and message['nlp']['entities']:
         # TODO: check entity `scheduleInquiry` and `competition` ->
             # TODO: check entity `date/time` then filter the query based on it
             # else: get soonest
         # else: check `compeition` only -> ask user if he wants the schdule (default: or for now assume he wants so)
         # else: check `schduleInquiry` only -> ask user which competition he wants (default: show schdule for all competitions)
-    # TODO: return constant reply for unknown messages ( TODO: should be informative like give examples of questions or list of buttons)
-    pass
+
+        # Handle competition schedule inquiry
+        if('intent' in message['nlp']['entities'] and
+           message['nlp']['entities']['intent'][0]['value'] == 'scheduleInquiry' and
+           message['nlp']['entities']['intent'][0]['confidence'] >= 0.75):
+            # Check which competition  # TODO: Handle 1+ competitions inquiried at the same message
+            if('competition' in message['nlp']['entities'] and
+               message['nlp']['entities']['competition'][0]['metadata'] is not None and
+               message['nlp']['entities']['competition'][0]['confidence'] >= 0.75):
+                competition_api_id = int(message['nlp']['entities']['competition'][0]['metadata'])
+                try:
+                    competition = Competition.objects.get(api_id=competition_api_id)
+                    nearst_10_fixtures = competition.next_30_days_fixtures()  # TODO: Enhance by return a button to list all matches
+
+                    if nearst_10_fixtures is not None:
+                        return [
+                            'اوك دي ماتشات الفتره الجايه في ' + competition.name_ar,
+                            build_fixtures_messneger_generic_message(nearst_10_fixtures)
+                        ]
+                    else:
+                        return ['مافيش ماتشات الشهر ده 🤷‍♂️ 🤦🏻‍♂️']
+                except Competition.DoesNotExist:
+                    logger.warning("Competition with API ID %d does not exits", competition_api_id)
+
+        # Handle `ok` sentences, ex: okay, okay, tmam, اوك
+        if 'ok' in message['nlp']['entities'] and message['nlp']['entities']['ok'][0]['confidence'] >= 0.75:
+            return [message['nlp']['entities']['ok'][0]['value'] + ' 👌']
+
+        # Hanlde `thanking` messages; ex: thanks , thank you, شكرا
+        if 'thanking' in message['nlp']['entities'] and message['nlp']['entities']['thanking'][0]['confidence'] >= 0.75:
+            emojis = ['🤗', '☺️', '🥰', '😉', '😊']
+            if message['nlp']['entities']['thanking'][0]['metadata'] == 'thanks_ar':
+                return ['العفو ' + random.choice(emojis)]
+            else:
+                return ['You Welcome ' + random.choice(emojis)]
+
+    # Handle Unknown messages
+    # TODO: Replace with informative reply like give examples of questions or list of buttons
+    return [constants.REPLY_TO_UNKNOWN_MESSAGE_0, constants.REPLY_TO_UNKNOWN_MESSAGE_1]

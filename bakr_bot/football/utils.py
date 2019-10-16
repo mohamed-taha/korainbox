@@ -3,12 +3,31 @@ def competition_directory_path(instance, filename):
     return f'competition_{instance.id}_{filename}'
 
 
-def get_supported_competitions_message(user_psid, site_domain):
-    """Return a facebook messenger generic message of a competition matches schedule.
-    Note: You can only list up to 10 elements in a generic message.
-    """
-    user, _ = User.objects.get_or_create(facebook_psid=user_psid)
-    supported_competitions = Competition.objects.filter(is_supported=True)[:10]
+def build_fixtures_messneger_generic_message(fixtures):
+    elements = []
 
+    for fixture in fixtures:
+        title = fixture.name_ar
+        logo_url = fixture.competition.logo.url  # TODO: Replace by img of the 2 teams and watermark
+        subtitle = str(fixture.event_date) + " \t " + str(fixture.event_time)  # FIXME: localize the date and time
 
-    return message
+        # TODO: Add follow/unfollow buttons
+        element = {
+            "title": title,
+            "image_url": logo_url,
+            "subtitle": subtitle
+        }
+
+        elements.append(element)
+
+    matches_schedule_message = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": elements
+            }
+        }
+    }
+    
+    return matches_schedule_message
