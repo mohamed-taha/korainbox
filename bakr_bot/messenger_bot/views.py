@@ -67,12 +67,9 @@ class MessengerBotView(generic.View):
                             user_info = get_user_info(sender_id)
                             first_name = '' if user_info is None else user_info.get('first_name')
                         finally:
-
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_0.format(first_name=first_name))
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_1)
                             bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_2)
-                            bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_3)
-                            bot.send_text_message(sender_id, constants.WELCOME_MESSAGE_4)
                             bot.send_action(sender_id, 'typing_on')
 
                             supported_competitions_message = get_supported_competitions_message(sender_id)
