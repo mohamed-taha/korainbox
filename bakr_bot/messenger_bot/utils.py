@@ -29,7 +29,13 @@ def get_user_info(user_psid):
 
     if resp.status_code == 200:
         info = resp.json()
-        create_user.delay(info)
+        user, created = User.objects.update_or_create(
+            facebook_psid=info['id'],
+            defaults={
+                'first_name': info.get('first_name'),
+                'last_name': info.get('last_name'),
+                'username': info['id']
+        })
         return info
     else:
         return None
