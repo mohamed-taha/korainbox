@@ -41,7 +41,7 @@ def fetch_and_save_supported_competitions_fixtures():
             logger.info("Scheduling today matches for competition %s", competition.name)
             # Schedule a task for ech comptetion follower to notify him on his time
             for user in competition.followers.all():
-                send_user_competition_today_matches.apply_aync(
+                send_user_competition_today_matches.apply_async(
                     (user.id, competition.id,), eta=now + timedelta(hours=8)
                 )  # Notify user on 8 AM server time(UTC); 10 AM Egypt time;
         else:
