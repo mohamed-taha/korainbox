@@ -103,12 +103,6 @@ def get_replies_to_text_message(message: dict) -> List[Union[dict, str]]:
         - reply: a list of either string message, dicts(generic messages) or mix of them.
     """
     if message.get('nlp') is not None and message['nlp']['entities']:
-        # TODO: check entity `scheduleInquiry` and `competition` ->
-            # TODO: check entity `date/time` then filter the query based on it
-            # else: get soonest
-        # else: check `compeition` only -> ask user if he wants the schdule (default: or for now assume he wants so)
-        # else: check `schduleInquiry` only -> ask user which competition he wants (default: show schdule for all competitions)
-
         # Handle competition schedule inquiry
         if('intent' in message['nlp']['entities'] and
            message['nlp']['entities']['intent'][0]['value'] == 'scheduleInquiry' and
@@ -124,7 +118,7 @@ def get_replies_to_text_message(message: dict) -> List[Union[dict, str]]:
 
                     if nearst_10_fixtures is not None:
                         return [
-                            'اوك دي ماتشات الفتره الجايه في ' + competition.name_ar,
+                            '⚽⚽ ' + 'اوك دي ماتشات الفتره الجايه في ' + competition.name_ar,
                             build_fixtures_messneger_generic_message(nearst_10_fixtures)
                         ]
                     else:
