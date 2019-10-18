@@ -66,6 +66,10 @@ small, .font_small {
   padding: 5% 0px;
 }
 
+.feature-img{
+  max-width: 400px;
+  max-height: 450px;
+}
 @media screen and (min-width: 768px) {
   .l-section-full-height {
     height: 100vh;
