@@ -51,7 +51,7 @@ def get_supported_competitions_message(user_psid):
 
     for competition in supported_competitions:
         title = competition.name_ar + " - " + competition.name
-        logo_url = competition.logo.url
+        logo_url = competition.logo_thumbnail.url
 
         if CompetitionUserMembership.objects.filter(user=user, competition=competition).exists():
             payload_action = "unfollow"

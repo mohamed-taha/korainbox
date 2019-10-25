@@ -20,7 +20,7 @@ def build_fixtures_messneger_generic_message(fixtures):
 
     for fixture in fixtures:
         title = fixture.name_ar
-        logo_url = fixture.competition.logo.url  # TODO: Replace by img of the 2 teams and watermark
+        logo_url = fixture.competition.logo_thumbnail.url  # TODO: Replace by img of the 2 teams and watermark
         subtitle = (datetime.combine(fixture.event_date, fixture.event_time) + timedelta(hours=2)).strftime("%Y-%m-%d  %H:%M")
 
         # TODO: Add follow/unfollow buttons
