@@ -9,8 +9,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from model_utils.models import TimeStampedModel
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
-from bakr_bot.football.utils import competition_directory_path
+from bakr_bot.football.utils import (
+    competition_directory_path,
+    fixture_directory_path,
+    team_directory_path,
+)
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -37,6 +43,10 @@ class Competition(TimeStampedModel):
     is_supported = models.BooleanField(_('Is competition supported by KoraInbox?'), default=False)
 
     logo = models.FileField(upload_to=competition_directory_path)
+    logo_thumbnail = ImageSpecField(source='logo',
+                                    processors=[ResizeToFill(300, 180)],
+                                    format='png',
+                                    options={'quality': 60})
     followers = models.ManyToManyField(User, through='CompetitionUserMembership')
 
     data = JSONField(null=True, blank=True)
@@ -108,6 +118,12 @@ class Team(TimeStampedModel):
     name = models.CharField(max_length=250)
     name_ar = models.CharField(max_length=250, blank=True, null=True)
 
+    logo = models.FileField(upload_to=team_directory_path, blank=True, null=True)
+    logo_thumbnail = ImageSpecField(source='logo',
+                                    processors=[ResizeToFill(140, 140)],
+                                    format='png',
+                                    options={'quality': 60})
+
     data = JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -129,6 +145,8 @@ class Fixture(TimeStampedModel):
 
     home_team = models.ForeignKey(Team, related_name='home_fixtures', on_delete=models.CASCADE)
     away_team = models.ForeignKey(Team, related_name='away_fixures', on_delete=models.CASCADE)
+
+    logo = models.FileField(upload_to=fixture_directory_path, blank=True, null=True)
 
     data = JSONField(null=True, blank=True)
 
