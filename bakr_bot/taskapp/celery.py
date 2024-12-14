@@ -1,5 +1,6 @@
 import os
 from celery import Celery
+from celery.schedules import crontab
 from django.apps import apps, AppConfig
 from django.conf import settings
 
@@ -27,6 +28,19 @@ class CeleryAppConfig(AppConfig):
         installed_apps = [app_config.name for app_config in apps.get_app_configs()]
         app.autodiscover_tasks(lambda: installed_apps, force=True)
 
+        app.conf.beat_schedule = {
+            'run-get-supported-competitions-fixtures-every-day-at-12-am': {
+                'task': 'bakr_bot.football.tasks.fetch_and_save_supported_competitions_fixtures',
+                'schedule': crontab(
+                    minute=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_MINUTE,
+                    hour=settings.TASK_GET_COMPETITIONS_MATCHES_RUNTIME_HOUR, day_of_week='*',
+                    day_of_month='*', month_of_year='*'
+                ),  # Run daily at 12 AM server time (UTC); 2 AM Cairo; 1 AM London;
+            },
+        }
+
+        # Set Visibility timeout to 30 days (in seconds)
+        app.conf.broker_transport_options = {'visibility_timeout': 2592000}
 
 @app.task(bind=True)
 def debug_task(self):

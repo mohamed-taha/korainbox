@@ -1,0 +1,54 @@
+---
+
+# Make sure the sudoers file preserves the ability to use ssh forwarding.
+# That way we don't need to store a private key on the server to get
+# access to the git repository. Don't forget to add the key used by the
+# git repository to your ssh-agent using ssh-add on the machine where you
+# run the playbooks.
+#
+# https://stackoverflow.com/questions/24124140/ssh-agent-forwarding-with-ansible
+
+- name: Add ssh agent line to sudoers
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: SSH_AUTH_SOCK
+    line: Defaults env_keep += "SSH_AUTH_SOCK"
+  when: ssh_forward_agent is defined and ssh_forward_agent
+  tags: git
+
+# TODO: move src to env vars
+- name: Add github ssh key
+  copy: >
+    src=~/.ssh/id_rsa
+    dest=/home/{{ server_user }}/.ssh/id_rsa.github
+    mode=0600
+  tags: git
+
+- name: configure ssh to use ansible key for github.com
+  template: >
+    src=templates/ssh_config.j2
+    dest=/home/{{ server_user }}/.ssh/config
+    mode=0644
+
+  tags: git
+
+- name: Setup the Git repo
+  environment:
+    TMPDIR: "/var/tmp"
+  git: repo={{ git_repo }}
+       version={{ git_branch }}
+       dest={{ project_path }}
+       accept_hostkey=yes
+       force=yes
+       key_file=/home/{{ server_user }}/.ssh/id_rsa.github
+  when: setup_git_repo is defined and setup_git_repo
+  notify: restart application
+  tags: git
+
+- name: Delete all .pyc files
+  command: find . -name '*.pyc' -delete
+  args:
+    chdir: "{{ project_path }}"
+  tags: git
+  changed_when: false

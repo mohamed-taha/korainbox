@@ -15,7 +15,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["bakrbot.com"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["korainbox.com"])
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -65,54 +65,54 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 
 # STORAGES
 # ------------------------------------------------------------------------------
-# # https://django-storages.readthedocs.io/en/latest/#installation
-# INSTALLED_APPS += ["storages"]  # noqa F405
+# https://django-storages.readthedocs.io/en/latest/#installation
+INSTALLED_APPS += ["storages"]  # noqa F405
 
-# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 # AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
-# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 # AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
-# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
-# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_QUERYSTRING_AUTH = False
-# # DO NOT change these unless you know what you're doing.
-# _AWS_EXPIRY = 60 * 60 * 24 * 7
-# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_S3_OBJECT_PARAMETERS = {
-#     "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate"
-# }
-# #  https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_DEFAULT_ACL = None
-# # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_QUERYSTRING_AUTH = False
+# DO NOT change these unless you know what you're doing.
+_AWS_EXPIRY = 60 * 60 * 24 * 7
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate"
+}
+#  https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_DEFAULT_ACL = None
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default='us-east-1')
 
 
-# # STATIC
-# # ------------------------
+# STATIC
+# ------------------------
 
-# STATICFILES_STORAGE = "config.settings.production.StaticRootS3Boto3Storage"
-# STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
+STATICFILES_STORAGE = "config.settings.production.StaticRootS3Boto3Storage"
+STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
 
 # # MEDIA
-# # ------------------------------------------------------------------------------
-# # region http://stackoverflow.com/questions/10390244/
-# # Full-fledge class: https://stackoverflow.com/a/18046120/104731
-# from storages.backends.s3boto3 import S3Boto3Storage  # noqa E402
+# ------------------------------------------------------------------------------
+# region http://stackoverflow.com/questions/10390244/
+# Full-fledge class: https://stackoverflow.com/a/18046120/104731
+from storages.backends.s3boto3 import S3Boto3Storage  # noqa E402
 
 
-# class StaticRootS3Boto3Storage(S3Boto3Storage):
-#     location = "static"
+class StaticRootS3Boto3Storage(S3Boto3Storage):
+    location = "static"
 
 
-# class MediaRootS3Boto3Storage(S3Boto3Storage):
-#     location = "media"
-#     file_overwrite = False
+class MediaRootS3Boto3Storage(S3Boto3Storage):
+    location = "media"
+    file_overwrite = False
 
 
-# # endregion
-# DEFAULT_FILE_STORAGE = "config.settings.production.MediaRootS3Boto3Storage"
-# MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"
+# endregion
+DEFAULT_FILE_STORAGE = "config.settings.production.MediaRootS3Boto3Storage"
+MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -140,9 +140,9 @@ TEMPLATES[0]["OPTIONS"]["loaders"] = [  # noqa F405
 #     "DJANGO_EMAIL_SUBJECT_PREFIX", default="[Bakr Bot]"
 # )
 
-# # ADMIN
-# # ------------------------------------------------------------------------------
-# # Django Admin URL regex.
+# ADMIN
+# ------------------------------------------------------------------------------
+# Django Admin URL regex.
 # ADMIN_URL = env("DJANGO_ADMIN_URL",)
 
 # Anymail (Mailgun)
@@ -206,17 +206,17 @@ LOGGING = {
 
 # Sentry
 # ------------------------------------------------------------------------------
-# SENTRY_DSN = env("SENTRY_DSN")
-# SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
 
-# sentry_logging = LoggingIntegration(
-#     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
-#     event_level=None,  # Send no events from log messages
-# )
-# sentry_sdk.init(
-#     dsn=SENTRY_DSN,
-#     integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
-# )
+sentry_logging = LoggingIntegration(
+    level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
+    event_level=None,  # Send no events from log messages
+)
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=[sentry_logging, DjangoIntegration(), CeleryIntegration()],
+)
 
 # Your stuff...
 # ------------------------------------------------------------------------------

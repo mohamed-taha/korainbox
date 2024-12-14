@@ -1,1 +1,60 @@
 {% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<div id="get-started" class="jumbotron l-section-full-height header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 hidden-sm hidden-xs">
+                <img src="{% static 'images/korainbox_screenshot.png' %}" alt="" class="img-responsive">
+            </div>
+            <div class="col-md-6 col-md-offset-1 rtl">
+                <h1>تابع الدوريات و فريقك المفضل من ماسنجر</h1>
+                <p>كوره انبوكس هايبعت لك كل يوم مواعيدالماتشات؛ والتشكيله و هاينبهك بالاهداف واحداث الماتش لحظه حدوثها.
+                </p>
+                <p>مش هتحتاج تسطب اي ابليكاشن او تفتح مواقع؛ كل حاجه عاوز تعرفعها هاتقدر تسالني عنها.</p>
+
+                <p><a class="btn btn-primary-border btn-lg" href="https://m.me/korainbox"
+                        role="button">بدء الاستخدام</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="features" class="l-section features rtl">
+    <div class="container">
+        <div class="row">
+            <div id="feature-carousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#feature-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#feature-carousel" data-slide-to="1"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner text-center" role="listbox">
+                    <div class="item active">
+                        <img src="{% static 'images/korainbox_screenshot.png' %}" class="l-img-center feature-img">
+                        <div class="carousel-caption-bottom">
+                            <h1 class="text-primary text-margin-bottom-x">تابع الدوريات المحليه والعالميه</h1>
+                            <p>كوره انبوكس دايما متوفر عنده معلومات عن اشهر الدوريات في العالم زي الدوري الانجليزي، الدوري الأسباني، الدوري الألماني، الدوري الايطالي وكمان الدوري المصري.</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img src="{% static 'images/korainbox_screenshot_2.png' %}" class="l-img-center feature-img">
+                        <div class="carousel-caption-bottom">
+                            <h1 class="text-primary text-margin-bottom-x">مش محتاج تنرل أي ابليكاشن</h1>
+                            <p>كوره انبوكس هايخليك تعرف كل حاجه عن فريقك والدوريات اللي بتتابعها كل ده من خلال الماسنجر و من غير تحميل اي تطبيقات خارجيه.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End of carousel-->
+        </div>
+    </div>
+</div>
+<!-- End of features -->
+
+<!-- End of intro -->
+
+{% endblock %}

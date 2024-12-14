@@ -1,0 +1,43 @@
+---
+
+# Virtualenv settings.
+recreate_virtualenv: false
+virtualenv_python_version: "{{ base_python_package }}"
+
+# Application settings.
+virtualenv_path: "/webapps/{{ application_name }}"
+project_path: "{{ virtualenv_path }}/{{ project_name }}"
+application_log_dir: "{{ virtualenv_path }}/logs"
+application_log_file: "{{ application_log_dir }}/gunicorn_supervisor.log"
+requirements_file: "{{ project_path }}/requirements/production.txt"
+
+
+# Gunicorn settings.
+gunicorn_user: "{{ application_name }}"
+gunicorn_group: webapps
+
+
+# Nginx settings.
+nginx_access_log_file: "{{ application_log_dir }}/nginx_access.log"
+nginx_error_log_file: "{{ application_log_dir }}/nginx_error.log"
+nginx_static_dir: "{{ virtualenv_path }}/static/"
+nginx_media_dir: "{{ virtualenv_path }}/media/"
+
+
+# Django environment variables.
+django_environment:
+  DJANGO_SETTINGS_MODULE: "{{ django_settings_file }}"
+  DJANGO_SECRET_KEY: "{{ django_secret_key }}"
+  MEDIA_ROOT: "{{ nginx_media_dir }}"
+  STATIC_ROOT: "{{ nginx_static_dir }}"
+  DATABASE_URL:  "{{ db_url }}"
+  DJANGO_ALLOWED_HOSTS: 'korainbox.com'
+  CELERY_BROKER_URL: "{{ broker_url }}"
+  TASK_GET_COMPETITIONS_MATCHES_RUNTIME_HOUR: 0
+  TASK_GET_COMPETITIONS_MATCHES_RUNTIME_MINUTE: 0
+  FB_PAGE_ACCESS_TOKEN: EAAFjZCs0nwPMBAIDZAQJ3uVmcUeMCdZAVvnPSvPePpFOKAZAJx0Jgfa2mhU9uPtPJgc0pJjXuvfVO2MooOsBCnYGHiBHEhR6Nf0JixYqBIZAftVFBVjyExuZAmEQjhOaRPJ6KEr1JQ8SxQJ5OisvycT4qEHUEBveVgCT7EtyifSVjIhpZAsWr5J
+  FB_GRAPH_API_URL: https://graph.facebook.com/v3.3/
+  LIVESCORE_API_KEY: jJhdvPO8iptR3x1g
+  LIVESCORE_API_SECRET: vZdRwlTiJkzKCIlVrD9XsX5LnzDq6EHC
+  DJANGO_AWS_STORAGE_BUCKET_NAME: static-staging-korainbox
+  SENTRY_DSN: https://c3fed567267847618936f7a3d678078c@sentry.io/1473370
